@@ -12,6 +12,10 @@ jobs:
     name: Build Flutter APK
     runs-on: ubuntu-latest
     
+    defaults:
+      run:
+        working-directory: flutter_chat_app
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,12 +31,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.24.0'
           cache: true
 
-      - name: Verify Flutter installation
+      - name: Accept Android licenses
         run: |
-          flutter --version
+          yes | flutter doctor --android-licenses || true
           flutter doctor -v
 
       - name: Get dependencies
@@ -51,12 +54,12 @@ jobs:
         with:
           name: android-apk
           path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/flutter-apk/chat-app-*.apk
+            flutter_chat_app/build/app/outputs/flutter-apk/app-release.apk
+            flutter_chat_app/build/app/outputs/flutter-apk/chat-app-*.apk
           retention-days: 30
 
       - name: Display APK info
         run: |
           echo "✅ APK built successfully!"
-          echo "📦 APK Location: build/app/outputs/flutter-apk/app-release.apk"
+          echo "📦 APK Location: flutter_chat_app/build/app/outputs/flutter-apk/app-release.apk"
           ls -lh build/app/outputs/flutter-apk/
