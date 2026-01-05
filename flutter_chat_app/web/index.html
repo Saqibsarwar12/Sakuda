@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving this web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Flutter Chat App WebView">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Chat App">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Chat App</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" type="text/css" href="splash/style.css">
+  <meta name="theme-color" content="#1f3c88">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-config" content="icons/browserconfig.xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+  <!-- This script installs service_worker.js to provide PWA functionality to
+       your application. Remove this script to disable PWA support. Learn more
+       https://developers.google.com/web/tools/workbox/modules/workbox_window -->
+  <script>
+    var serviceWorkerVersion = null;
+    var scriptLoaded = false;
+    function loadMainDartJs() {
+      if (scriptLoaded) {
+        return;
+      }
+      scriptLoaded = true;
+      var scriptTag = document.createElement('script');
+      scriptTag.src = 'main.dart.js';
+      scriptTag.type = 'application/javascript';
+      document.body.append(scriptTag);
+    }
+
+    if ('serviceWorker' in navigator) {
+      // Service workers are supported. Use them.
+      window.addEventListener('load', function () {
+        // Wait for registration to finish before dropping the <script> tag.
+        // Otherwise, the browser consumes our progress events.
+        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        navigator.serviceWorker.register(serviceWorkerUrl).then(function (reg) {
+          function refreshPage() {
+            if (!scriptLoaded) {
+              loadMainDartJs();
+            }
+          }
+          if (reg.installing) {
+            reg.installing.addEventListener('statechange', function () {
+              if (reg.installing.state === 'installed') {
+                reg.installing.postMessage(new CustomEvent('SKIP_WAITING'));
+              }
+            });
+          } else if (reg.waiting) {
+            reg.waiting.postMessage(new CustomEvent('SKIP_WAITING'));
+          } else if (reg.active) {
+            refreshPage();
+          }
+          reg.addEventListener('updatefound', function () {
+            reg.installing.addEventListener('statechange', function () {
+              if (reg.installing.state === 'installed') {
+                reg.installing.postMessage(new CustomEvent('SKIP_WAITING'));
+              }
+            });
+          });
+        }).catch(function (e) {
+          // Exception thrown, service worker registration failed.
+          console.log('Flutter Service Worker registration failed.');
+          loadMainDartJs();
+        });
+      });
+    } else {
+      // Service workers not supported. Fall back to loading the app without them.
+      loadMainDartJs();
+    }
+  </script>
+</body>
+</html>
