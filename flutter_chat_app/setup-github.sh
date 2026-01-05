@@ -1,4 +1,4 @@
-#!/bin/bash
+https://github.com/Saqibsarwar12/Sakuda/actions#!/bin/bash
 
 # Quick setup script for GitHub Actions APK build
 # Run this from Codespaces to prepare your repository
