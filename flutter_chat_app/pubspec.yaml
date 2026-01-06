@@ -11,12 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # WebView packages - v2 embedding only
-  webview_flutter: ^4.8.0
+  # WebView - v2 embedding only
+  webview_flutter: 4.4.2
 
 dependency_overrides:
-  webview_flutter_android: ^4.0.0
-  webview_flutter_platform_interface: ^2.10.0
+  # Force v2-only Android implementation
+  webview_flutter_android: 3.12.1
+  webview_flutter_platform_interface: 2.8.0
+  webview_flutter_wkwebview: 3.9.4
 
 dev_dependencies:
   flutter_test:
