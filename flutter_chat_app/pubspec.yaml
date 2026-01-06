@@ -11,8 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # WebView for displaying web content (v2 embedding only)
-  webview_flutter: ^4.8.0
+  # WebView packages - FORCE PINNED for v2 embedding compatibility
+  # Main WebView plugin
+  webview_flutter: 4.7.0
+  
+  # Android implementation - v2 embedding ONLY (no v1 support)
+  webview_flutter_android: 3.16.0
+  
+  # Platform interface
+  webview_flutter_platform_interface: 2.10.0
 
 dev_dependencies:
   flutter_test:
